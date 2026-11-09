@@ -138,8 +138,8 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <h1 className="brand">
-          <img src="/logo.jpg" alt="Sensorial" className="brand-logo" />
-          <span>Sensorial</span>
+          <img src="/logo.jpg" alt="Sensoria" className="brand-logo" />
+          <span>Sensoria</span>
         </h1>
         <nav className="tabs">
           <button className={tab === 'tienda' ? 'active' : ''} onClick={() => setTab('tienda')}>
