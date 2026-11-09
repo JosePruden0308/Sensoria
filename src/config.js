@@ -59,3 +59,9 @@ export const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || ''
 
 // Número de WhatsApp con código de país, solo dígitos (ej. 573001234567).
 export const WHATSAPP_NUMBER = (import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')
+
+// Perfiles de redes sociales (define VITE_INSTAGRAM_URL y VITE_FACEBOOK_URL).
+export const SOCIAL_LINKS = {
+  instagram: import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/',
+  facebook: import.meta.env.VITE_FACEBOOK_URL || 'https://www.facebook.com/'
+}

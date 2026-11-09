@@ -6,12 +6,17 @@ import {
   savePayments,
   uid
 } from './store.js'
-import { formatMoney, API_BASE, WHATSAPP_NUMBER } from './config.js'
+import { formatMoney, API_BASE, WHATSAPP_NUMBER, SOCIAL_LINKS } from './config.js'
 import { finalizeWompiRedirect } from './wompi.js'
 import ProductForm from './components/ProductForm.jsx'
 import Checkout from './components/Checkout.jsx'
 import Payments from './components/Payments.jsx'
 import ContactModal from './components/ContactModal.jsx'
+
+// Minúsculas y sin tildes para comparar búsquedas.
+function normalizeText(text) {
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
 
 export default function App() {
   const [tab, setTab] = useState('tienda')
@@ -21,6 +26,7 @@ export default function App() {
   const [cart, setCart] = useState([]) // [{ id, name, price, qty }]
   const [notice, setNotice] = useState('')
   const [showContact, setShowContact] = useState(false)
+  const [query, setQuery] = useState('')
 
   const hasBackend = Boolean(API_BASE)
 
@@ -78,6 +84,17 @@ export default function App() {
   }, [])
 
   const displayedPayments = hasBackend && serverOrders.length > 0 ? serverOrders : payments
+
+  const normalizedQuery = normalizeText(query.trim())
+  const filteredProducts = useMemo(
+    () =>
+      normalizedQuery
+        ? products.filter((p) =>
+            normalizeText(`${p.name} ${p.description || ''}`).includes(normalizedQuery)
+          )
+        : products,
+    [products, normalizedQuery]
+  )
 
   const cartTotal = useMemo(
     () => cart.reduce((sum, i) => sum + i.price * i.qty, 0),
@@ -173,9 +190,21 @@ export default function App() {
           <div className="grid-2">
             <section>
               <h2>Catálogo</h2>
+              <div className="search-box">
+                <input
+                  type="search"
+                  placeholder="Buscar productos..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  aria-label="Buscar productos"
+                />
+              </div>
               <div className="catalog">
                 {products.length === 0 && <p className="muted">No hay productos.</p>}
-                {products.map((p) => (
+                {products.length > 0 && filteredProducts.length === 0 && (
+                  <p className="muted">No se encontraron productos para "{query}".</p>
+                )}
+                {filteredProducts.map((p) => (
                   <article key={p.id} className="card product">
                     {p.image ? (
                       <img src={p.image} alt={p.name} loading="lazy" />
@@ -287,6 +316,14 @@ export default function App() {
       </main>
 
       <footer className="footer">
+        <div className="social-links">
+          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="social-btn instagram">
+            Instagram
+          </a>
+          <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" className="social-btn facebook">
+            Facebook
+          </a>
+        </div>
         <span className="muted small">
           Datos guardados localmente en tu navegador (localStorage).
         </span>
