@@ -13,6 +13,8 @@ import Checkout from './components/Checkout.jsx'
 import Payments from './components/Payments.jsx'
 import ContactModal from './components/ContactModal.jsx'
 
+const PAGE_SIZE = 4
+
 // Minúsculas y sin tildes para comparar búsquedas.
 function normalizeText(text) {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -27,6 +29,8 @@ export default function App() {
   const [notice, setNotice] = useState('')
   const [showContact, setShowContact] = useState(false)
   const [query, setQuery] = useState('')
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [page, setPage] = useState(0)
 
   const hasBackend = Boolean(API_BASE)
 
@@ -94,6 +98,13 @@ export default function App() {
           )
         : products,
     [products, normalizedQuery]
+  )
+
+  const pageCount = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE))
+  const currentPage = Math.min(page, pageCount - 1)
+  const visibleProducts = filteredProducts.slice(
+    currentPage * PAGE_SIZE,
+    currentPage * PAGE_SIZE + PAGE_SIZE
   )
 
   const cartTotal = useMemo(
@@ -172,6 +183,17 @@ export default function App() {
             Pagos {displayedPayments.length > 0 && <span className="pill">{displayedPayments.length}</span>}
           </button>
           <button onClick={() => setShowContact(true)}>Contáctenos</button>
+          <button
+            className={`search-toggle${searchOpen ? ' active' : ''}`}
+            onClick={() => setSearchOpen((v) => !v)}
+            aria-label="Buscar productos"
+            title="Buscar productos"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+          </button>
           {WHATSAPP_NUMBER && (
             <a
               className="whatsapp-link"
@@ -190,24 +212,47 @@ export default function App() {
           <div className="grid-2">
             <section>
               <h2>Catálogo</h2>
-              <div className="search-box">
-                <input
-                  type="search"
-                  placeholder="Buscar productos..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  aria-label="Buscar productos"
-                />
-              </div>
+              {searchOpen && (
+                <div className="search-box">
+                  <input
+                    type="search"
+                    placeholder="Buscar productos..."
+                    value={query}
+                    onChange={(e) => {
+                      setQuery(e.target.value)
+                      setPage(0)
+                    }}
+                    aria-label="Buscar productos"
+                    autoFocus
+                  />
+                </div>
+              )}
+              <div className="catalog-carousel">
+                <button
+                  className="arrow-btn"
+                  onClick={() => setPage(currentPage - 1)}
+                  disabled={currentPage === 0}
+                  aria-label="Productos anteriores"
+                >
+                  ‹
+                </button>
               <div className="catalog">
                 {products.length === 0 && <p className="muted">No hay productos.</p>}
                 {products.length > 0 && filteredProducts.length === 0 && (
                   <p className="muted">No se encontraron productos para "{query}".</p>
                 )}
-                {filteredProducts.map((p) => (
+                {visibleProducts.map((p) => (
                   <article key={p.id} className="card product">
                     {p.image ? (
-                      <img src={p.image} alt={p.name} loading="lazy" />
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null
+                          e.currentTarget.src = `https://picsum.photos/seed/${p.id}/800/600`
+                        }}
+                      />
                     ) : (
                       <div className="img-placeholder">Sin imagen</div>
                     )}
@@ -228,6 +273,15 @@ export default function App() {
                     </button>
                   </article>
                 ))}
+              </div>
+                <button
+                  className="arrow-btn"
+                  onClick={() => setPage(currentPage + 1)}
+                  disabled={currentPage >= pageCount - 1}
+                  aria-label="Más productos"
+                >
+                  ›
+                </button>
               </div>
             </section>
 
