@@ -99,10 +99,12 @@ body {
 .whatsapp-link {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   padding: 8px 16px;
   border-radius: var(--radius);
-  background: #25d366;
-  color: #fff;
+  border: 2px solid #25d366;
+  background: #fff;
+  color: #25d366;
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
@@ -110,7 +112,16 @@ body {
 }
 
 .whatsapp-link:hover {
-  background: #1ebe5a;
+  background: #f0fdf4;
+}
+
+.whatsapp-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #25d366;
+  mask: url(/whatsapp.svg) no-repeat center / contain;
+  -webkit-mask: url(/whatsapp.svg) no-repeat center / contain;
 }
 
 .tabs .search-toggle {

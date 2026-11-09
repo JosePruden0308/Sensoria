@@ -219,7 +219,9 @@ export default function App() {
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola Sensoria, quiero más información')}`}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Escribir por WhatsApp"
             >
+              <span className="whatsapp-icon" aria-hidden="true" />
               WhatsApp
             </a>
           )}
