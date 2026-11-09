@@ -18,8 +18,14 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(160deg, #faf4ee 0%, #f3ece6 45%, #eef2ec 100%);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 107, 157, 0.45), transparent 40%),
+    radial-gradient(circle at 85% 15%, rgba(255, 214, 102, 0.55), transparent 42%),
+    radial-gradient(circle at 70% 85%, rgba(72, 219, 251, 0.5), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(162, 120, 255, 0.45), transparent 40%),
+    linear-gradient(135deg, #ff9a9e 0%, #fad0c4 25%, #fbc2eb 50%, #a6c1ee 75%, #84fab0 100%);
   background-attachment: fixed;
+  min-height: 100vh;
   color: var(--text);
 }
 
@@ -38,7 +44,8 @@ body {
   padding: 20px 0;
   position: sticky;
   top: 0;
-  background: #faf4ee;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
   z-index: 10;
 }
 
