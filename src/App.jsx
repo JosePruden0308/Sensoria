@@ -6,7 +6,7 @@ import {
   savePayments,
   uid
 } from './store.js'
-import { formatMoney, API_BASE } from './config.js'
+import { formatMoney, API_BASE, WHATSAPP_NUMBER } from './config.js'
 import { finalizeWompiRedirect } from './wompi.js'
 import ProductForm from './components/ProductForm.jsx'
 import Checkout from './components/Checkout.jsx'
@@ -155,6 +155,16 @@ export default function App() {
             Pagos {displayedPayments.length > 0 && <span className="pill">{displayedPayments.length}</span>}
           </button>
           <button onClick={() => setShowContact(true)}>Contáctenos</button>
+          {WHATSAPP_NUMBER && (
+            <a
+              className="whatsapp-link"
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola Sensoria, quiero más información')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
+          )}
         </nav>
       </header>
 

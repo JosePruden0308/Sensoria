@@ -96,6 +96,23 @@ body {
   border-color: transparent;
 }
 
+.whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: #25d366;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.whatsapp-link:hover {
+  background: #1ebe5a;
+}
+
 .pill {
   display: inline-block;
   background: #fff;

@@ -56,3 +56,6 @@ export function formatMoney(amount) {
 // FormSubmit enviará un email de confirmación para activar el buzón.
 // ============================================================
 export const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || ''
+
+// Número de WhatsApp con código de país, solo dígitos (ej. 573001234567).
+export const WHATSAPP_NUMBER = (import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')
