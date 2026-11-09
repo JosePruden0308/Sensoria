@@ -57,8 +57,14 @@ export function formatMoney(amount) {
 // ============================================================
 export const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || ''
 
-// Número de WhatsApp con código de país, solo dígitos (ej. 573001234567).
-export const WHATSAPP_NUMBER = (import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')
+// Números de WhatsApp con código de país, solo dígitos (ej. 573001234567).
+// Define VITE_WHATSAPP_NUMBER y, opcionalmente, VITE_WHATSAPP_NUMBER_2.
+export const WHATSAPP_NUMBERS = [
+  import.meta.env.VITE_WHATSAPP_NUMBER,
+  import.meta.env.VITE_WHATSAPP_NUMBER_2,
+]
+  .map((n) => (n || '').replace(/\D/g, ''))
+  .filter(Boolean)
 
 // Perfiles de redes sociales (define VITE_INSTAGRAM_URL y VITE_FACEBOOK_URL).
 export const SOCIAL_LINKS = {

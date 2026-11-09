@@ -6,7 +6,7 @@ import {
   savePayments,
   uid
 } from './store.js'
-import { formatMoney, API_BASE, WHATSAPP_NUMBER, SOCIAL_LINKS } from './config.js'
+import { formatMoney, API_BASE, WHATSAPP_NUMBERS, SOCIAL_LINKS } from './config.js'
 import { finalizeWompiRedirect } from './wompi.js'
 import ProductForm from './components/ProductForm.jsx'
 import Checkout from './components/Checkout.jsx'
@@ -213,18 +213,19 @@ export default function App() {
               </div>
             )}
           </div>
-          {WHATSAPP_NUMBER && (
+          {WHATSAPP_NUMBERS.map((number) => (
             <a
+              key={number}
               className="whatsapp-link"
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola Sensoria, quiero más información')}`}
+              href={`https://wa.me/${number}?text=${encodeURIComponent('Hola Sensoria, quiero más información')}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Escribir por WhatsApp"
+              aria-label={`Escribir por WhatsApp al ${number}`}
             >
               <span className="whatsapp-icon" aria-hidden="true" />
               WhatsApp
             </a>
-          )}
+          ))}
         </nav>
       </header>
 
