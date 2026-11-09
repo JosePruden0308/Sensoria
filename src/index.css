@@ -144,6 +144,45 @@ body {
   margin-bottom: 16px;
 }
 
+.search-dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.search-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  width: min(280px, 80vw);
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.search-panel input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.search-panel input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Empuja el contenido hacia abajo para que el panel de búsqueda no se solape. */
+main.search-open {
+  padding-top: 72px;
+  transition: padding-top 0.15s ease;
+}
+
 .search-box input {
   width: 100%;
   padding: 10px 14px;

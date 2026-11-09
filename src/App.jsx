@@ -183,17 +183,36 @@ export default function App() {
             Pagos {displayedPayments.length > 0 && <span className="pill">{displayedPayments.length}</span>}
           </button>
           <button onClick={() => setShowContact(true)}>Contáctenos</button>
-          <button
-            className={`search-toggle${searchOpen ? ' active' : ''}`}
-            onClick={() => setSearchOpen((v) => !v)}
-            aria-label="Buscar productos"
-            title="Buscar productos"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-3.5-3.5" />
-            </svg>
-          </button>
+          <div className="search-dropdown">
+            <button
+              className={`search-toggle${searchOpen ? ' active' : ''}`}
+              onClick={() => setSearchOpen((v) => !v)}
+              aria-label="Buscar productos"
+              aria-expanded={searchOpen}
+              title="Buscar productos"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+            </button>
+            {searchOpen && (
+              <div className="search-panel">
+                <input
+                  type="search"
+                  placeholder="Buscar productos..."
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value)
+                    setPage(0)
+                    if (tab !== 'tienda') setTab('tienda')
+                  }}
+                  aria-label="Buscar productos"
+                  autoFocus
+                />
+              </div>
+            )}
+          </div>
           {WHATSAPP_NUMBER && (
             <a
               className="whatsapp-link"
@@ -207,26 +226,11 @@ export default function App() {
         </nav>
       </header>
 
-      <main>
+      <main className={searchOpen ? 'search-open' : ''}>
         {tab === 'tienda' && (
           <div className="grid-2">
             <section>
               <h2>Catálogo</h2>
-              {searchOpen && (
-                <div className="search-box">
-                  <input
-                    type="search"
-                    placeholder="Buscar productos..."
-                    value={query}
-                    onChange={(e) => {
-                      setQuery(e.target.value)
-                      setPage(0)
-                    }}
-                    aria-label="Buscar productos"
-                    autoFocus
-                  />
-                </div>
-              )}
               <div className="catalog-carousel">
                 <button
                   className="arrow-btn"
