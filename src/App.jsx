@@ -12,6 +12,7 @@ import ProductForm from './components/ProductForm.jsx'
 import Checkout from './components/Checkout.jsx'
 import Payments from './components/Payments.jsx'
 import ContactModal from './components/ContactModal.jsx'
+import Info from './components/Info.jsx'
 
 const PAGE_SIZE = 4
 
@@ -181,6 +182,9 @@ export default function App() {
           </button>
           <button className={tab === 'pagos' ? 'active' : ''} onClick={() => setTab('pagos')}>
             Pagos {displayedPayments.length > 0 && <span className="pill">{displayedPayments.length}</span>}
+          </button>
+          <button className={tab === 'info' ? 'active' : ''} onClick={() => setTab('info')}>
+            Información
           </button>
           <button onClick={() => setShowContact(true)}>Contáctenos</button>
           <div className="search-dropdown">
@@ -373,6 +377,8 @@ export default function App() {
             />
           </section>
         )}
+
+        {tab === 'info' && <Info />}
       </main>
 
       <footer className="footer">

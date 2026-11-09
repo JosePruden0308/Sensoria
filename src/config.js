@@ -68,3 +68,28 @@ export const SOCIAL_LINKS = {
   instagram: import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/',
   facebook: import.meta.env.VITE_FACEBOOK_URL || 'https://www.facebook.com/'
 }
+
+// ============================================================
+// Información corporativa (sección "Quiénes somos")
+// Personaliza estos valores o define las variables VITE_* en tu .env.
+// ============================================================
+export const STORE_INFO = {
+  legalName: import.meta.env.VITE_STORE_LEGAL_NAME || 'Sensoria S.A.S.',
+  taxId: import.meta.env.VITE_STORE_TAX_ID || 'NIT 900.000.000-0',
+  address: import.meta.env.VITE_STORE_ADDRESS || 'Cra 00 #00-00, Bogotá, Colombia',
+  phone: import.meta.env.VITE_STORE_PHONE || '+57 300 000 0000',
+  email: CONTACT_EMAIL || import.meta.env.VITE_STORE_EMAIL || 'contacto@sensoria.co',
+  foundedYear: import.meta.env.VITE_STORE_FOUNDED_YEAR || '2023'
+}
+
+// Monto (COP) a partir del cual el envío es gratis.
+export const FREE_SHIPPING_THRESHOLD = Number(
+  import.meta.env.VITE_FREE_SHIPPING_THRESHOLD || 150000
+)
+
+// Tarifas de envío por zona (flete según ubicación).
+export const SHIPPING_RATES = [
+  { zone: 'Bogotá y alrededores', cost: 8000, eta: '1-2 días hábiles' },
+  { zone: 'Ciudades principales', cost: 12000, eta: '2-4 días hábiles' },
+  { zone: 'Resto del país', cost: 18000, eta: '4-7 días hábiles' }
+]
