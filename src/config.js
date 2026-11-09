@@ -66,6 +66,10 @@ export const WHATSAPP_NUMBERS = [
   .map((n) => (n || '').replace(/\D/g, ''))
   .filter(Boolean)
 
+// Enlace de invitación a un grupo de WhatsApp con ambos números.
+// wa.me solo puede abrir un chat con un número, por eso se usa un grupo.
+export const WHATSAPP_GROUP_URL = import.meta.env.VITE_WHATSAPP_GROUP_URL || 'https://wa.me/'
+
 // Perfiles de redes sociales (define VITE_INSTAGRAM_URL y VITE_FACEBOOK_URL).
 export const SOCIAL_LINKS = {
   instagram: import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/',
