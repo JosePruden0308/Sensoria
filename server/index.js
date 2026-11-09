@@ -20,8 +20,23 @@ const WOMPI_API_BASE =
 const ORDERS_FILE = new URL('./orders.json', import.meta.url)
 
 const app = express()
+app.disable('x-powered-by')
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('X-Frame-Options', 'DENY')
+  res.setHeader('Referrer-Policy', 'no-referrer')
+  next()
+})
 app.use(cors({ origin: ALLOWED_ORIGIN }))
-app.use(express.json())
+app.use(express.json({ limit: '32kb' }))
+
+// Rechaza JSON malformado sin tumbar el proceso.
+app.use((err, _req, res, next) => {
+  if (err?.type === 'entity.parse.failed' || err?.type === 'entity.too.large') {
+    return res.status(400).json({ error: 'Cuerpo de la solicitud inválido.' })
+  }
+  next(err)
+})
 
 // ---- Persistencia simple en archivo JSON ----
 async function loadOrders() {
@@ -40,6 +55,42 @@ function sha256hex(text) {
   return crypto.createHash('sha256').update(text).digest('hex')
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Recorta y limita la longitud de un texto proveniente del cliente.
+function clean(value, max) {
+  return String(value ?? '').trim().slice(0, max)
+}
+
+// Valida y normaliza el pedido recibido; lanza Error con mensaje si es inválido.
+function sanitizeCheckout(body) {
+  const amountInCents = Math.round(Number(body?.amountCop) * 100)
+  if (!Number.isFinite(amountInCents) || amountInCents < 150000) {
+    throw new Error('Monto inválido (mínimo 1.500 COP).')
+  }
+  if (amountInCents > 1_000_000_00) {
+    throw new Error('Monto demasiado alto.')
+  }
+  const email = clean(body?.email, 120)
+  if (email && !EMAIL_RE.test(email)) {
+    throw new Error('Email inválido.')
+  }
+  const rawItems = Array.isArray(body?.items) ? body.items.slice(0, 100) : []
+  const items = rawItems.map((i) => ({
+    id: clean(i?.id, 40),
+    name: clean(i?.name, 120),
+    qty: Math.max(0, Math.min(10000, Math.trunc(Number(i?.qty) || 0))),
+    price: Math.max(0, Number(i?.price) || 0)
+  }))
+  return {
+    amountInCents,
+    email,
+    items,
+    method: clean(body?.method, 40) || 'Wompi',
+    customer: clean(body?.customer, 120) || 'Cliente anónimo'
+  }
+}
+
 // ============================================================
 // 1) Firmar la transacción (el secreto nunca sale al cliente)
 //    El frontend envía el monto y los datos del pedido; aquí
@@ -48,12 +99,13 @@ function sha256hex(text) {
 // ============================================================
 app.post('/api/checkout', async (req, res) => {
   try {
-    const { amountCop, customer, email, items, method } = req.body || {}
-    const amountInCents = Math.round(Number(amountCop) * 100)
-    if (!amountInCents || amountInCents < 150000) {
-      // Wompi exige mínimo 1.500 COP.
-      return res.status(400).json({ error: 'Monto inválido (mínimo 1.500 COP).' })
+    let data
+    try {
+      data = sanitizeCheckout(req.body)
+    } catch (validationErr) {
+      return res.status(400).json({ error: validationErr.message })
     }
+    const { amountInCents, customer, email, items, method } = data
 
     const reference = `SENS-${Date.now().toString(36)}-${crypto.randomBytes(3).toString('hex')}`
     const currency = 'COP'
@@ -64,10 +116,10 @@ app.post('/api/checkout', async (req, res) => {
       reference,
       amountInCents,
       currency,
-      method: method || 'Wompi',
-      customer: customer || 'Cliente anónimo',
-      email: email || '',
-      items: items || [],
+      method,
+      customer,
+      email,
+      items,
       status: 'PENDING',
       createdAt: new Date().toISOString()
     }

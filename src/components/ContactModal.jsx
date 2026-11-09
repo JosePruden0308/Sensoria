@@ -16,6 +16,10 @@ export default function ContactModal({ onClose }) {
       setError('Completa todos los campos.')
       return
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setError('Ingresa un email válido.')
+      return
+    }
     setError('')
 
     if (!CONTACT_EMAIL) {

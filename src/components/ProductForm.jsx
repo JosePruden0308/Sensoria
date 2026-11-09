@@ -15,16 +15,20 @@ export default function ProductForm({ onSave }) {
     e.preventDefault()
     const price = parseFloat(form.price)
     const stock = parseInt(form.stock, 10)
+    const image = form.image.trim()
     if (!form.name.trim()) return setError('El nombre es obligatorio.')
     if (isNaN(price) || price < 0) return setError('Precio inválido.')
     if (isNaN(stock) || stock < 0) return setError('Stock inválido.')
+    if (image && !/^https?:\/\/.+/i.test(image)) {
+      return setError('La URL de imagen debe empezar por http:// o https://')
+    }
 
     onSave({
       name: form.name.trim(),
       description: form.description.trim(),
       price,
       stock,
-      image: form.image.trim()
+      image
     })
     setForm(empty)
     setError('')

@@ -10,19 +10,26 @@ export default function Checkout({ cart, total, onPaid }) {
 
   const wompiOn = isWompiConfigured()
 
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
   function localItems() {
     return cart.map((i) => ({ id: i.id, name: i.name, qty: i.qty, price: i.price }))
   }
 
   async function pagar(method) {
     setFeedback(null)
+    const cleanEmail = email.trim()
+    if (wompiOn && !EMAIL_RE.test(cleanEmail)) {
+      setFeedback({ type: 'error', msg: 'Ingresa un email válido para pagar con Wompi.' })
+      return
+    }
     if (wompiOn) {
       // Pago real: redirige a Wompi. El pedido se registra al volver (ver App.jsx).
       setLoading(true)
       try {
         await startWompiCheckout({
           amountCop: total,
-          customerEmail: email.trim(),
+          customerEmail: cleanEmail,
           method,
           items: localItems(),
           customer: customer.trim() || 'Cliente anónimo'
@@ -37,7 +44,7 @@ export default function Checkout({ cart, total, onPaid }) {
     onPaid({
       method,
       customer: customer.trim() || 'Cliente anónimo',
-      email: email.trim(),
+      email: cleanEmail,
       amount: total,
       items: localItems(),
       raw: null
