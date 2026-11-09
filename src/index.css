@@ -441,19 +441,19 @@ h2 {
 
 .pay-bancolombia {
   background: #fdda24;
-  color: #263238 !important;
+  color: #003b71 !important;
 }
 
 .pay-bancolombia:hover:not(:disabled) {
-  background: #f5cf00;
+  background: #e8c71a;
 }
 
 .pay-pse {
-  background: #0a9b4e;
+  background: #003b71;
 }
 
 .pay-pse:hover:not(:disabled) {
-  background: #087f40;
+  background: #002a52;
 }
 
 label {
