@@ -57,18 +57,11 @@ export function formatMoney(amount) {
 // ============================================================
 export const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || ''
 
-// Números de WhatsApp con código de país, solo dígitos (ej. 573001234567).
-// Define VITE_WHATSAPP_NUMBER y, opcionalmente, VITE_WHATSAPP_NUMBER_2.
-export const WHATSAPP_NUMBERS = [
-  import.meta.env.VITE_WHATSAPP_NUMBER,
-  import.meta.env.VITE_WHATSAPP_NUMBER_2,
-]
-  .map((n) => (n || '').replace(/\D/g, ''))
-  .filter(Boolean)
+// Número de WhatsApp con código de país, solo dígitos (ej. 573001234567).
+// Define VITE_WHATSAPP_CONTACT_NUMBER. Vacío = botón oculto.
+const WHATSAPP_CONTACT_NUMBER = (import.meta.env.VITE_WHATSAPP_CONTACT_NUMBER || '').replace(/\D/g, '')
 
-// Enlace de invitación a un grupo de WhatsApp con ambos números.
-// wa.me solo puede abrir un chat con un número, por eso se usa un grupo.
-export const WHATSAPP_GROUP_URL = import.meta.env.VITE_WHATSAPP_GROUP_URL || 'https://wa.me/'
+export const WHATSAPP_URL = WHATSAPP_CONTACT_NUMBER ? `https://wa.me/${WHATSAPP_CONTACT_NUMBER}` : ''
 
 // Perfiles de redes sociales (define VITE_INSTAGRAM_URL y VITE_FACEBOOK_URL).
 export const SOCIAL_LINKS = {

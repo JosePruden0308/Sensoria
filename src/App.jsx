@@ -6,7 +6,7 @@ import {
   savePayments,
   uid
 } from './store.js'
-import { formatMoney, API_BASE, WHATSAPP_GROUP_URL, SOCIAL_LINKS } from './config.js'
+import { formatMoney, API_BASE, WHATSAPP_URL, SOCIAL_LINKS } from './config.js'
 import { finalizeWompiRedirect } from './wompi.js'
 import ProductForm from './components/ProductForm.jsx'
 import Checkout from './components/Checkout.jsx'
@@ -213,16 +213,18 @@ export default function App() {
               </div>
             )}
           </div>
-          <a
-            className="whatsapp-link"
-            href={WHATSAPP_GROUP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Escribir por WhatsApp"
-          >
-            <span className="whatsapp-icon" aria-hidden="true" />
-            WhatsApp
-          </a>
+          {WHATSAPP_URL && (
+            <a
+              className="whatsapp-link"
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escribir por WhatsApp"
+            >
+              <span className="whatsapp-icon" aria-hidden="true" />
+              WhatsApp
+            </a>
+          )}
         </nav>
       </header>
 
