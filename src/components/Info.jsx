@@ -6,23 +6,7 @@ import {
   SHIPPING_RATES
 } from '../config.js'
 
-const REVIEWS = [
-  {
-    name: 'Laura G.',
-    rating: 5,
-    text: 'Los productos llegaron antes de lo prometido y muy bien empacados. ¡Volveré a comprar!'
-  },
-  {
-    name: 'Andrés M.',
-    rating: 5,
-    text: 'Excelente atención por WhatsApp, me ayudaron a elegir y el pago fue muy fácil.'
-  },
-  {
-    name: 'Catalina R.',
-    rating: 4,
-    text: 'Muy buena calidad. Tuve una duda con un cambio y la resolvieron sin problema.'
-  }
-]
+const REVIEWS = []
 
 const FAQS = [
   {
@@ -185,7 +169,7 @@ export default function Info() {
 
       {/* Quiénes somos */}
       <section id="quienes-somos" className="card info-section">
-        <h2>Quiénes somos</h2>
+        <h2>¿Quiénes somos?</h2>
         <p>
           En <strong>{STORE_INFO.legalName}</strong> nacimos en {STORE_INFO.foundedYear} con la
           misión de ofrecer productos de calidad y una experiencia de compra cercana y
